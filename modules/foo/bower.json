@@ -1,0 +1,10 @@
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "description": "The Foo module",
+  "private": true,
+  "ignore": [
+    "sass",
+    "gulpfile.js"
+  ]
+}
