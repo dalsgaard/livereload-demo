@@ -5,8 +5,8 @@ var sass = require('gulp-sass');
 
 require('gulp-help')(gulp);
 
-fs.readdirSync(__dirname + '/gulp').forEach(function (fn) {
-  require(__dirname + '/gulp/' + fn)(gulp);
+fs.readdirSync(__dirname + '/gulp/tasks').forEach(function (fn) {
+  require(__dirname + '/gulp/tasks/' + fn)(gulp);
 });
 
 gulp.task('sass', function () {

@@ -1,5 +1,14 @@
+var exec = require('child_process').exec;
 var fs = require('fs');
-var install = require("gulp-install");
+
+var utils = require('../lib/utils');
+
+
+function deps (names, postfix) {
+  return names.map(function (name) {
+    return 'module:' + name + postfix;
+  });
+}
 
 module.exports = function (gulp) {
 
@@ -24,33 +33,26 @@ module.exports = function (gulp) {
 
     // Install
 
-    gulp.task(prefix + ':npm:install', function () {
-      var src = [path + './package.json'];
-      gulp.src(src).pipe(install({ args: ['prefix=../..'] }));
+    gulp.task(prefix + ':install:npm', function () {
+      return utils.exec('gulp install:npm', { cwd: path });
     });
 
-    gulp.task(prefix + ':bower:install', function () {
-      var src = [path + './bower.json'];
-      gulp.src(src).pipe(install());
+    gulp.task(prefix + ':install:bower', function () {
+      return utils.exec('gulp install:bower', { cwd: path });
     });
 
-    gulp.task(prefix + ':install', [
-      prefix + ':npm:install',
-      prefix + ':bower:install'
-    ]);
-  }
-
-  function deps (names, postfix) {
-    return names.map(function (name) {
-      return 'module:' + name + postfix;
+    gulp.task(prefix + ':install', function (cb) {
+      return utils.exec('gulp install', { cwd: path });
     });
   }
 
-  var moduleNames = fs.readdirSync(__dirname + '/../modules');
+  var moduleNames = fs.readdirSync(__dirname + '/../../modules');
   moduleNames.forEach(function (name) {
     init(name);
   });
 
   gulp.task('module:watch', deps(moduleNames, ':watch'));
+
+  gulp.task('module:install', deps(moduleNames, ':install'));
 
 };
